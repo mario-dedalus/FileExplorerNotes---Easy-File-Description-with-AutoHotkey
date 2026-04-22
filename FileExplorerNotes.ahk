@@ -1,26 +1,12 @@
-;============================================================
-; Script Name : FileExplorerNotes
-; Author      : Gued3s
-; Version     : 2.0
-; Date        : 2026-04-22
-; 
-; Features:
-;   - Create/edit notes via our Native Dark Mode GUI (Ctrl+Shift+D)
-;   - Quick preview descriptions in tooltips (Hold ctrl+q)
-;   - Windows 11 Tabs support (Active tab detection via COM)
-;   - Atomic Save strategy (Prevents data loss and corruption)
-;   - Dirty Check (Warning prompt for unsaved changes)
-;   - Hidden .filenotes folder per directory (Sidecar system)
-;   - O(1) FIFO cache with 30-second TTL for performance
-;   - 100ms polling for highly responsive UI
-;
-; Scope:
-;   - Lightweight, single-file solution (KISS Principle)
-;   - Windows Explorer integration only
-;   - No external dependencies
-;   - Minimal CPU/memory footprint
-;   - UX-focused (Professional Notepad-like aesthetics)
-;============================================================
+; ============================================================================
+; PROJECT     : FileExplorerNotes v2.0
+; AUTHOR      : Gued3s
+; DESCRIPTION : "Commit messages" for your local files. Context-aware 
+;               description system for Windows Explorer.
+; ARCHITECTURE: AHK v2 Native GUI, Map-based Window Manager, Atomic I/O,
+;               Win11 Tabs COM Resilience, O(1) FIFO Cache.
+; LICENSE     : MIT
+; ============================================================================
 
 #Requires AutoHotkey v2.0
 #SingleInstance Force
@@ -293,8 +279,12 @@ SaveNoteAtomic(notePath, content) {
 ;    - Minimizes Disk I/O and CPU usage during navigation.
 ; ============================================================================
 
+ClearPreview() => ToolTip()
+
 PreviewStart() {
     global PreviewState
+    SetTimer(ClearPreview, 0)
+    
     if PreviewState["Active"]
         return
     PreviewState["Active"] := true
@@ -307,7 +297,7 @@ PreviewStop() {
     PreviewState["Active"] := false
     PreviewState["LastPath"] := ""
     SetTimer(PreviewTick, 0)
-    ToolTip()
+    SetTimer(ClearPreview, -250) ; 1 sec delay to clear the tooltip 
 }
 
 PreviewTick() {
