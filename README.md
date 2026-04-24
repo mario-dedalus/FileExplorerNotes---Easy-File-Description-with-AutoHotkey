@@ -74,11 +74,6 @@ This project is licensed under the **MIT License** - meaning it's free for every
 
 *Stop guessing. Start committing context to your files.*
 
-## ⚖️ License
-This project is licensed under the **MIT License** - meaning it's free for everyone, forever. 
-
-*Stop guessing. Start committing context to your files.*
-
 ---
 
 ## 🚀 v3.0 Enhancements (community fork by mario-dedalus)
